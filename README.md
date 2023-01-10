@@ -8,7 +8,7 @@ This is a side-project created in order to build a recommendation system for use
 4.   Segmenting the products and customers using WordCloud and Clustering based on the transaction histories
 
 # Summary
-1. Recommendation System model was built using the **.........** method, and was able to achieve **0.12687346417761125 RMSE**
+1. Recommendation System model was built using the **Binary Input with Pearson Similarity** method, and was able to achieve **0.12687346417761125 RMSE**
 2. Followings are the **top 5 most popular products**:
 
     - White Hanging Heart T-Light Holder	(2028 sold)
