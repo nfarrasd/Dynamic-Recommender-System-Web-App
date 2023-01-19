@@ -97,5 +97,4 @@ def update_data(users_id, stocks_id, n_count):
             row4 = [max_idx4, encoder, stocks_id]
             stock.insert_row(row4)
 
-    
-    return customer_data, stock_data
+    pass
