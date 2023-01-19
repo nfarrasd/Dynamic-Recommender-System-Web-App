@@ -1,4 +1,4 @@
-# Recommendation-System-and-Segmentation-on-Purchasing-Customer
+# Recommender-System-and-Segmentation-on-Purchasing-Customer
 
 This is a side-project created in order to build a recommendation system for users as well as segmenting the users based on an e-commerce transactional data by the following steps:
 
@@ -6,9 +6,12 @@ This is a side-project created in order to build a recommendation system for use
 2.   Transform the data (making sure it is usable and consistent)
 3.   Make a Recommendation System model using Turicreate (Source: [Medium by Moorissa Tjokro](https://medium.datadriveninvestor.com/how-to-build-a-recommendation-system-for-purchase-data-step-by-step-d6d7a78800b6)
 4.   Segmenting the products and customers using WordCloud and Clustering based on the transaction histories
+5.   Deploy the Recommender Pipeline with Flask 
 
 # Summary
-1. Recommendation System model was built using the **Binary Input with Pearson Similarity** method, and was able to achieve **0.12687346417761125 RMSE**
+1. Recommendation System Pipeline was built under 2 scenarios:
+    - **Purchase Counts with Pearson Similarity** for old users
+    - **Popularity Model with Binary Input** method for new users
 2. Followings are the **top 5 most popular products**:
 
     - White Hanging Heart T-Light Holder	(2028 sold)
