@@ -10,7 +10,7 @@ This is a side-project created in order to build a recommendation system for use
 
 # Summary
 1. Recommendation System Pipeline was built under 2 scenarios:
-    - **Purchase Counts with Pearson Similarity** for old users
+    - **Purchase Counts with Pearson Similarity** method for old users
     - **Popularity Model with Binary Input** method for new users
 2. Followings are the **top 5 most popular products**:
 
