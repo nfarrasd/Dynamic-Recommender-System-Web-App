@@ -25,7 +25,7 @@ def home():
 
 @app.route('/update', methods = ['GET'])
 def updateData():
-    req = request.get_json(force = True)
+    req = request.get_json()
     users_id = req['CustomerID']
     stocks_id = req['StockCode']
     n_count = req['value']
@@ -36,7 +36,8 @@ def updateData():
 
 @app.route('/predict', methods = ['POST'])
 def predict():
-    customer_ID = int(request.form.values())
+    req = request.get_json()
+    customer_ID = req['CustomerID']
 
     prediction = final_model(customer_ID, 
                             users_id = 'CustomerID', 
@@ -49,5 +50,5 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.debug=True
+    app.debug = True
     app.run()
