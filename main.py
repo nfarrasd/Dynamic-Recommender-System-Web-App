@@ -23,7 +23,7 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/update', methods = ['GET'])
+@app.route('/update', methods = ['POST'])
 def updateData():
     req = request.get_json()
     users_id = req['CustomerID']
