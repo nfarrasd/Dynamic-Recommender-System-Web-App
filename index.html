@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8"> 
+    <title> Recommender System API </title>
+</head>
+
+<body>
+    <div class = "login">
+        <h1>
+            Recommender System for Purchasing Customer
+        </h1>
+
+        <form action =  "{{ url_for('predict') }}" method = "post">
+            <input type = "text" name = "CustomerID" placeholder = "Customer ID" required = "required"/>
+
+            <button type = "submit" class = "btn btn-primary btn-block btn-large">
+                Recommend Item
+            </button>
+        </form>
+
+        <br>
+        {{ prediction_text }}
+
+        <br>
+        <br>
+        <hr>
+        <br>
+        <form action =  "{{ url_for('update') }}" method = "post">
+            <input type = "text" name = "CustomerID" placeholder = "Customer ID" required = "required"/>
+            <input type = "text" name = "StockCode" placeholder = "Stock Code" required = "required"/>
+            <input type = "text" name = "value" placeholder = "Number of Item(s)" required = "required"/>
+
+            <button type = "submit" class = "btn btn-primary btn-block btn-large">
+                Add Data
+            </button>
+        </form>
+
+    </div>
+</body>
+</html>
