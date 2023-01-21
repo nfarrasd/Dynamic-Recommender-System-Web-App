@@ -1,9 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from model import get_data, final_model, mapping
+from model import final_model, mapping
+from data_func import get_data, update_data
 
 
 # Connect to Sheet
@@ -17,3 +18,36 @@ app = Flask(__name__)
 
 
 # Routing
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
+@app.route('/update', methods = ['GET'])
+def updateData():
+    req = request.get_json(force = True)
+    users_id = req['CustomerID']
+    stocks_id = req['StockCode']
+    n_count = req['value']
+
+    update_data(users_id, stocks_id, n_count)
+    return jsonify(req)
+
+
+@app.route('/predict', methods = ['POST'])
+def predict():
+    customer_ID = int(request.form.values())
+
+    prediction = final_model(customer_ID, 
+                            users_id = 'CustomerID', 
+                            items_id = 'StockID',
+                            targets = 'value',
+                            n_rec = 10)
+
+    output = ' | '.join(prediction)
+    return render_template('index.html', prediction_text = f'Recommended Items Code: {output}')
+
+
+if __name__ == '__main__':
+    app.debug=True
+    app.run()

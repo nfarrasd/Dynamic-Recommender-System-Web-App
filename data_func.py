@@ -2,9 +2,12 @@ import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 
+import string
+import random
+
 
 # Read Sheet File
-def get_data(names):
+def get_data(names : str):
     # Connect to Sheet
     scope_app = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive', 
                  'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive'] 
@@ -27,14 +30,16 @@ def get_data(names):
 
     else:
         for col in df.columns:
-            if col != 'StockCode':
+            if col not in ['StockCode', 'Description']:
                 df[col] = df[col].astype(int)
 
     return df
 
 
 # Update Database Data
-def update_data(users_id, stocks_id, n_count):
+def update_data(users_id : str,
+                stocks_id : str,
+                n_count : int):
     # Connect to Sheet
     scope_app = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive', 
                  'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive'] 
@@ -54,47 +59,61 @@ def update_data(users_id, stocks_id, n_count):
 
     # Check existing values
     if users_id in customer_data['CustomerID'].values:
+        encoded_user = customer_data.loc[customer_data['CustomerID'] == users_id]['Encoder'].values[0]
         if stocks_id in stock_data['StockCode'].values:
             # Update cell in the Purchase Data
-            temp1 = purchase_data.loc[(purchase_data['CustomerID'] == users_id) &
-                                      (purchase_data['StockCode'] == stocks_id)]
+            encoded_stock = stock_data.loc[stock_data['StockCode'] == stocks_id]['Encoder'].values[0]
+            temp1 = purchase_data.loc[(purchase_data['CustomerID'] == encoded_user) &
+                                      (purchase_data['StockCode'] == encoded_stock)]
             idx1 = temp1.index[0]
             val1 = temp1.iloc[idx1]['value']
             purchase.update_cell(1, 4 , val1 + n_count)
 
         else:
+            # Insert row to the Stock Data
+            max_idx4 = max(stock_data.index) + 1
+            encoded_stock = max_idx4
+            row4 = [max_idx4, stocks_id, encoded_stock, 'pass']
+            stock.insert_row(row4)
+
             # Insert row to the Purchase Data
             max_idx1 = max(purchase_data.index) + 1
-            row1 = [max_idx1, users_id, stocks_id, n_count]
+            row1 = [max_idx1, encoded_user, encoded_stock, n_count]
             purchase.insert_row(row1)
 
             # Insert row to the Binary Data
             max_idx2 = max(binary_data.index) + 1
-            row2 = [max_idx2, users_id, stocks_id, 1]
+            row2 = [max_idx2, encoded_user, encoded_stock, 1]
             binary.insert_row(row2)
 
     else:
         # Insert row to the Customer Data
         max_idx3 = max(customer_data.index) + 1
-        encoder = 'pass'
-        row3 = [max_idx3, encoder, users_id]
+        encoded_user = max_idx3
+        row3 = [max_idx3, users_id, encoded_user]
         customer.insert_row(row3)
+
+        if stocks_id in stock_data['StockCode'].values:
+            encoded_stock = stock_data.loc[stock_data['StockCode'] == stocks_id]['Encoder'].values[0]
+
+        else:
+            letters = string.ascii_uppercase
+            stock_desc = ''.join(random.choice(letters) for i in range(10))
+
+            # Insert row to the Stock Data
+            max_idx4 = max(stock_data.index) + 1
+            encoded_stock = max_idx4
+            row4 = [max_idx4, stocks_id, encoded_stock, stock_desc]
+            stock.insert_row(row4)
 
         # Insert row to the Purchase Data
         max_idx1 = max(purchase_data.index) + 1
-        row1 = [max_idx1, users_id, stocks_id, n_count]
+        row1 = [max_idx1, encoded_user, encoded_stock, n_count]
         purchase.insert_row(row1)
 
         # Insert row to the Binary Data
         max_idx2 = max(binary_data.index) + 1
-        row2 = [max_idx2, users_id, stocks_id, 1]
+        row2 = [max_idx2, encoded_user, encoded_stock, 1]
         binary.insert_row(row2)
-
-        if stocks_id not in stock_data['StockCode'].values:
-            # Insert row to the Stock Data
-            max_idx4 = max(stock_data.index) + 1
-            encoder = 'pass'
-            row4 = [max_idx4, encoder, stocks_id]
-            stock.insert_row(row4)
 
     pass

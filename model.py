@@ -40,7 +40,8 @@ def final_model(customer_ID,
 
 
 # Map Encoded Data
-def mapping(lst, name):
+def mapping(lst : list, 
+            name : str):
 
     customer_data = get_data('customers_data')
     stock_data = get_data('stocks_data')
