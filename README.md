@@ -1,6 +1,6 @@
-# Recommender-System-and-Segmentation-on-Purchasing-Customer
+# Interactive Dynamic Recommender System
 
-This is a side-project created in order to build a recommendation system for users as well as segmenting the users based on an e-commerce transactional data by the following steps:
+This is a side-project created in order to build a recommendation system pipeline for users as well as segmenting the users based on an e-commerce transactional data by the following steps:
 
 1.   Extract the data from Kaggle website
 2.   Transform the data (making sure it is usable and consistent)
