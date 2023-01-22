@@ -14,7 +14,8 @@ cred = ServiceAccountCredentials.from_json_keyfile_name('recommender-system-3752
 client = gspread.authorize(cred)
 
 # Flask App
-app = Flask(__name__, template_folder = 'template')
+app = Flask(__name__,
+            template_folder = 'template')
 
 
 # Routing
@@ -28,7 +29,8 @@ def updateUsers():
     req = request.get_json()
     users_id = req['CustomerID']
 
-    update_users_stocks(users_id, 'user')
+    update_users_stocks(id = users_id, 
+                        name = 'user')
     return jsonify(req)
 
 
@@ -36,8 +38,11 @@ def updateUsers():
 def updateStocks():
     req = request.get_json()
     stocks_id = req['StockCode']
+    stocks_description = req['Description']
 
-    update_users_stocks(stocks_id, 'stock')
+    update_users_stocks(id = stocks_id, 
+                        name = 'stock', 
+                        description = stocks_description)
     return jsonify(req)
 
 
@@ -48,7 +53,9 @@ def updateTransactions():
     stocks_id = req['StockCode']
     n_count = req['value']
 
-    update_transactions(users_id, stocks_id, n_count)
+    update_transactions(users_id = users_id, 
+                        stocks_id = stocks_id, 
+                        n_count = n_count)
     return jsonify(req)
 
 
@@ -64,7 +71,8 @@ def predict():
                             n_rec = 10)
 
     output = ' | '.join(prediction)
-    return render_template('index.html', prediction_text = f'Recommended Items Code: {output}')
+    return render_template('index.html', 
+                           prediction_text = f'Recommended Items Code: {output}')
 
 
 if __name__ == '__main__':
