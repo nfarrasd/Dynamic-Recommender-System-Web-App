@@ -4,7 +4,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 from model import final_model, mapping
-from data_func import get_data, update_data
+from data_func import get_data, update_users_stocks, update_transactions
 
 
 # Connect to Sheet
@@ -14,7 +14,7 @@ cred = ServiceAccountCredentials.from_json_keyfile_name('recommender-system-3752
 client = gspread.authorize(cred)
 
 # Flask App
-app = Flask(__name__)
+app = Flask(__name__, template_folder = 'template')
 
 
 # Routing
@@ -23,14 +23,32 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/update', methods = ['POST'])
-def updateData():
+@app.route('/updateUsers', methods = ['POST'])
+def updateUsers():
+    req = request.get_json()
+    users_id = req['CustomerID']
+
+    update_users_stocks(users_id, 'user')
+    return jsonify(req)
+
+
+@app.route('/updateStocks', methods = ['POST'])
+def updateStocks():
+    req = request.get_json()
+    stocks_id = req['StockCode']
+
+    update_users_stocks(stocks_id, 'stock')
+    return jsonify(req)
+
+
+@app.route('/updateTransactions', methods = ['POST'])
+def updateTransactions():
     req = request.get_json()
     users_id = req['CustomerID']
     stocks_id = req['StockCode']
     n_count = req['value']
 
-    update_data(users_id, stocks_id, n_count)
+    update_transactions(users_id, stocks_id, n_count)
     return jsonify(req)
 
 
