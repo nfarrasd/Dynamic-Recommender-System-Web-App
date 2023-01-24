@@ -14,8 +14,7 @@ cred = ServiceAccountCredentials.from_json_keyfile_name('recommender-system-3752
 client = gspread.authorize(cred)
 
 # Flask App
-app = Flask(__name__,
-            template_folder = 'template')
+app = Flask(__name__, template_folder = 'template')
 
 
 # Routing
@@ -26,53 +25,72 @@ def home():
 
 @app.route('/updateUsers', methods = ['POST'])
 def updateUsers():
-    req = request.get_json()
-    users_id = req['CustomerID']
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):    
+        req = request.get_json()
+        users_id = req['CustomerID']
 
-    update_users_stocks(id = users_id, 
-                        name = 'user')
-    return jsonify(req)
+        update_users_stocks(id = users_id, 
+                            name = 'user')
+        return jsonify(req)
+
+    else:
+        return 'Invalid.'
 
 
 @app.route('/updateStocks', methods = ['POST'])
 def updateStocks():
-    req = request.get_json()
-    stocks_id = req['StockCode']
-    stocks_description = req['Description']
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        req = request.get_json()
+        stocks_id = req['StockCode']
+        stocks_description = req['Description']
 
-    update_users_stocks(id = stocks_id, 
-                        name = 'stock', 
-                        description = stocks_description)
-    return jsonify(req)
+        update_users_stocks(id = stocks_id, 
+                            name = 'stock', 
+                            description = stocks_description)
+        return jsonify(req)
+
+    else:
+        return 'Invalid.'
 
 
 @app.route('/updateTransactions', methods = ['POST'])
 def updateTransactions():
-    req = request.get_json()
-    users_id = req['CustomerID']
-    stocks_id = req['StockCode']
-    n_count = req['value']
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        req = request.get_json()
+        users_id = req['CustomerID']
+        stocks_id = req['StockCode']
+        n_count = req['value']
 
-    update_transactions(users_id = users_id, 
-                        stocks_id = stocks_id, 
-                        n_count = n_count)
-    return jsonify(req)
+        update_transactions(users_id = users_id, 
+                            stocks_id = stocks_id, 
+                            n_count = n_count)
+        return jsonify(req)
+
+    else:
+        return 'Invalid.'
 
 
 @app.route('/predict', methods = ['POST'])
 def predict():
-    req = request.get_json()
-    customer_ID = req['CustomerID']
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        req = request.get_json()
+        customer_ID = req['CustomerID']
 
-    prediction = final_model(customer_ID, 
-                            users_id = 'CustomerID', 
-                            items_id = 'StockID',
-                            targets = 'value',
-                            n_rec = 10)
+        prediction = final_model(customer_ID, 
+                                users_id = 'CustomerID', 
+                                items_id = 'StockID',
+                                targets = 'value',
+                                n_rec = 10)
 
-    output = ' | '.join(prediction)
-    return render_template('index.html', 
-                           prediction_text = f'Recommended Items Code: {output}')
+        return render_template('index.html', 
+                                prediction_text = prediction)
+
+    else:
+        return 'Invalid.'
 
 
 if __name__ == '__main__':
