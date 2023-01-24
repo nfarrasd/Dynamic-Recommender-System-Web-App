@@ -8,7 +8,7 @@
 <body>
     <div class = "login">
         <h1>
-            Recommender System for Purchasing Customer
+            Interactive Dynamic Recommender System for Purchasing Customer
         </h1>
 
         <form action =  "{{ url_for('predict') }}" method = "post">
@@ -26,16 +26,110 @@
         <br>
         <hr>
         <br>
-        <form action =  "{{ url_for('update') }}" method = "post">
-            <input type = "text" name = "CustomerID" placeholder = "Customer ID" required = "required"/>
-            <input type = "text" name = "StockCode" placeholder = "Stock Code" required = "required"/>
-            <input type = "text" name = "value" placeholder = "Number of Item(s)" required = "required"/>
 
-            <button type = "submit" class = "btn btn-primary btn-block btn-large">
-                Add Data
+        <h3>
+            Add Customer(s) Data
+        </h3>
+            <input type = "text" name = "CustomerID" placeholder = "Customer ID" required = "required" id = "cust_id"/>
+            
+            <button class = "btn btn-primary btn-block btn-large" onclick = "updateUser()">
+                Submit
             </button>
-        </form>
+
+        <h3>
+            Add Stock(s) Data
+        </h3>
+            <input type = "text" name = "StockCode" placeholder = "Stock Code" required = "required" id = "stock_id"/>
+            <input type = "text" name = "Description" placeholder = "Item Description" required = "required" id = "desc"/>
+
+            <button class = "btn btn-primary btn-block btn-large" onclick = "updateStock()">
+                Submit
+            </button>   
+
+        <h3>
+            Add Transaction(s) Data
+        </h3>
+            <input type = "text" name = "CustomerID" placeholder = "Customer ID" required = "required" id = "cust_id"/>
+            <input type = "text" name = "StockCode" placeholder = "Stock Code" required = "required" id = "stock_id"/>
+            <input type = "text" name = "value" placeholder = "Quantity" required = "required" id = "val"/>
+
+            <button class = "btn btn-primary btn-block btn-large" onclick = "updateTransaction()">
+                Submit
+            </button>
 
     </div>
 </body>
+<script type = "text/javascript">
+    
+    const updateUser = () => {
+        let CustomerID = document.getElementById('cust_id').value
+        console.log(CustomerID)
+        fetch('http://127.0.0.1:5000/updateUsers', 
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({'CustomerID': parseInt(CustomerID)})
+        }
+    )
+    .then(res => {
+        console.log(res)
+    }).catch(err => {
+        console.error(err)
+    })
+}
+
+    const updateStock = () => {
+        let StockCode = document.getElementById('stock_id').value
+        let Description = document.getElementById('desc').value
+
+        console.log(StockCode)
+        console.log(Description)
+        fetch('http://127.0.0.1:5000/updateStocks', 
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({'StockCode': String(StockCode),
+                                  'Description': String(Description)})
+        }
+    )
+    .then(res => {
+        console.log(res)
+    }).catch(err => {
+        console.error(err)
+    })
+}
+
+    const updateTransaction = () => {
+        let CustomerID = document.getElementById('cust_id').value
+        let StockCode = document.getElementById('stock_id').value
+        let Quantity = document.getElementById('val').value
+        console.log(CustomerID)
+        console.log(StockCode)
+        console.log(Quantity)
+        fetch('http://127.0.0.1:5000/updateTransactions', 
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({'CustomerID': parseInt(CustomerID),
+                                  'StockCode': String(StockCode),
+                                  'value': parseInt(Quantity)})
+        }
+    )
+    .then(res => {
+        console.log(res)
+    }).catch(err => {
+        console.error(err)
+    })
+}
+
+</script>       
 </html>
