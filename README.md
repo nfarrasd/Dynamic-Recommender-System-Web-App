@@ -8,7 +8,7 @@ This is a side-project created in order to build a recommendation system pipelin
 4.   Segmenting the products and customers using WordCloud and Clustering based on the transaction histories
 5.   Deploy the Recommender Pipeline with Flask so that users can freely enter new transactions and get recommendations
 
-**Note**: Steps 1-4 are not shown in this repo, only the analysis and model summary will be presented below.
+**Note**: Steps 1-4 are not shown in this repo, only the analysis and model summary will be presented below. (Since this repo focuses more on the RecSys model deployment and back-end)
 
 # Summary
 1. Recommendation System Pipeline was built under 2 scenarios:
