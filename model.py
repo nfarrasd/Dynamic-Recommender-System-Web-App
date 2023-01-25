@@ -1,60 +1,108 @@
+import gspread
+import pandas as pd
 import turicreate as tc
 
-from data_func import get_data, update_data
+from oauth2client.service_account import ServiceAccountCredentials
+
+from data_func import get_data, update_users_stocks, update_transactions
+
+
+# Recommended Result
+def recom_result(customer_ID : str):
+    customer_data = get_data('customers_data')
+    binary_data = get_data('binary_data')
+    old_customers = get_data('old_customers')
+    new_customers = get_data('new_customers')
+
+    if customer_ID in customer_data['CustomerID'].values:
+        encoded_user = customer_data.loc[customer_data['CustomerID'] == customer_ID]['Encoder'].values[0]
+        # Old purchasing customer
+        if encoded_user in binary_data['CustomerID'].values:
+            user_df = old_customers.loc[old_customers['CustomerID'] == encoded_user].reset_index(drop = True)
+
+        # New customer
+        else:
+            user_df = new_customers.loc[new_customers['CustomerID'] == encoded_user].reset_index(drop = True)
+
+        # Map Encoded Data
+        def mapping(name : int):
+
+            stock_data = get_data('stocks_data')
+            stock = stock_data.loc[stock_data['Encoder'] == name]['StockCode'].values[0]
+
+            return stock
+
+        recommendations = ''
+        for i in range(len(user_df)):
+            if user_df.iloc[i]['score'] != 0:
+                if recommendations == '':
+                    recommendations = mapping(int(user_df.iloc[i]['StockID']))
+                
+                else:
+                    recommendations = recommendations + ' | ' + mapping(int(user_df.iloc[i]['StockID']))
+
+        return recommendations
+
+    else:
+        return 'Customer ID does not exists.'
 
 
 # Recommender System Model
-def final_model(customer_ID, 
-                users_id = 'CustomerID', 
+def train_model(users_id = 'CustomerID', 
                 items_id = 'StockID',
                 targets = 'value',
                 n_rec = 10):
+                
+    # Connect to Sheet
+    scope_app = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive', 
+                 'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive'] 
+    cred = ServiceAccountCredentials.from_json_keyfile_name('recommender-system-375210-4fb076db18bf.json', scope_app) 
+    client = gspread.authorize(cred)
+
+    # Fetch the Data
+    old_customers = client.open('old_customers').sheet1
+    new_customers = client.open('new_customers').sheet1
 
     purchase_data = get_data('purchase_data')
     binary_data = get_data('binary_data')
 
-    if customer_ID in purchase_data['CustomerID'].values:
-        # Purchase Counts with Pearson Similarity
-        model = tc.item_similarity_recommender.create(tc.SFrame(purchase_data), 
+    users_to_recommend = list(set(purchase_data[users_id]))    
+
+    # Purchase Counts with Pearson Similarity
+    # Old customers
+    model_1 = tc.item_similarity_recommender.create(tc.SFrame(purchase_data), 
                                                     user_id = users_id, 
                                                     item_id = items_id, 
                                                     target = targets, 
                                                     similarity_type = 'pearson')
-        
-        recom = model.recommend(users = customer_ID, k = n_rec)
+            
+    recom_1 = model_1.recommend(users = users_to_recommend, k = n_rec)
 
-    else:
-        # Popularity Model with Binary Input
-        model = tc.item_similarity_recommender.create(tc.SFrame(binary_data), 
-                                                  user_id = users_id, 
-                                                  item_id = items_id, 
-                                                  target = targets)
-        
-        recom = model.recommend(users = customer_ID, k = n_rec)
+    # Popularity Model with Binary Input
+    # New customers
+    model_2 = tc.item_similarity_recommender.create(tc.SFrame(binary_data), 
+                                                    user_id = users_id, 
+                                                    item_id = items_id, 
+                                                    target = targets)
+            
+    recom_2 = model_2.recommend(users = users_to_recommend, k = n_rec)
 
-    df_rec = recom.to_dataframe()
+    def insert_list(lst):
+        for i in range(len(lst)):
+            lst[i].insert(0, i)
 
-    rec_list = list(df_rec.loc[df_rec['CustomerID'] == customer_ID]['StockID'])
+        return lst
 
-    return mapping(rec_list, 'stock')
+    df_rec_1 = recom_1.to_dataframe()
+    temp = df_rec_1.columns.values.tolist()
+    temp.insert(0, '')
+    old_customers.clear()
+    old_customers.update([temp] + insert_list(df_rec_1.values.tolist()))
 
+    df_rec_2 = recom_2.to_dataframe()
+    temp = df_rec_2.columns.values.tolist()
+    temp.insert(0, '')
+    new_customers.clear()
+    new_customers.update([temp] + insert_list(df_rec_2.values.tolist()))
 
-# Map Encoded Data
-def mapping(lst : list, 
-            name : str):
-
-    customer_data = get_data('customers_data')
-    stock_data = get_data('stocks_data')
-
-    mapped = []
-    if name == 'stock':
-        for item in lst:
-            stock = stock_data.loc[stock_data['Encoder'] == item]['StockCode']
-            mapped.append(stock)
-    
-    else:
-        for item in lst:
-            customer = customer_data.loc[customer_data['Encoder'] == item]['CustomerID']
-            mapped.append(customer)  
-
-    return mapped
+    pass
