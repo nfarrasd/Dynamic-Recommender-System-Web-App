@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request, render_template
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from model import final_model, mapping
+from model import recom_result, train_model
 from data_func import get_data, update_users_stocks, update_transactions
 
 
@@ -80,17 +80,20 @@ def predict():
         req = request.get_json()
         customer_ID = req['CustomerID']
 
-        prediction = final_model(customer_ID, 
-                                users_id = 'CustomerID', 
-                                items_id = 'StockID',
-                                targets = 'value',
-                                n_rec = 10)
+        prediction = recom_result(customer_ID)
 
         return render_template('index.html', 
                                 prediction_text = prediction)
 
     else:
         return 'Invalid.'
+
+
+@app.route('/train', methods = ['POST'])
+def train():
+    train_model()
+
+    return 'Model trained successfully.'
 
 
 if __name__ == '__main__':
