@@ -17,13 +17,13 @@
             </button>
 
         <br>
+        <br>
         Recommended Items Code:
         {{ prediction_text }}
 
         <br>
         <br>
         <hr>
-        <br>
         <h3>
             Add Customer(s) Data
         </h3>
@@ -53,8 +53,25 @@
             <button class = "btn btn-primary btn-block btn-large" onclick = "updateTransaction()">
                 Submit
             </button>
+        <br>
+        <br>
+        <br>
+        <form action = '/train' method = "POST">
+            <center>
+                <button type = "submit" class = "btn btn-primary btn-block btn-large">
+                    Train Model
+                </button>
+            </center>  
+        </form>
+        <br>
+        <br> 
+        <br> 
+        <footer>
+            Copyright  &copy; 2023 by Moch Nabil Farras Dhiya
+        </footer>
     </div>
 </body>
+
 
 <script type = "text/javascript">
 
