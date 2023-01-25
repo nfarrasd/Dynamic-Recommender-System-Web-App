@@ -2,9 +2,6 @@ import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 
-import string
-import random
-
 
 # Read Sheet File
 def get_data(names : str):
