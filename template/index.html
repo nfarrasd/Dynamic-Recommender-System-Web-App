@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8"> 
+    <title> Recommender System API </title>
+</head>
+
+<body>
+    <div class = "login">
+        <h1>
+            Interactive Dynamic Recommender System for Purchasing Customer
+        </h1>
+            <input type = "text" name = "CustomerID" placeholder = "Customer ID" required = "required" id = "rec_cust_id"/>
+
+            <button class = "btn btn-primary btn-block btn-large" onclick = "recommendUser()">
+                Recommend Item
+            </button>
+
+        <br>
+        <br>
+        Recommended Items Code:
+        <div>
+            <p id = "recommendedItem">
+                -
+            </p>
+        </div>
+
+        <br>
+        <br>
+        <hr>
+        <h3>
+            Add Customer(s) Data
+        </h3>
+            <input type = "text" name = "CustomerID" placeholder = "Customer ID" required = "required" id = "new_cust_id"/>
+            
+            <button class = "btn btn-primary btn-block btn-large" onclick = "updateUser()">
+                Submit
+            </button>
+
+        <h3>
+            Add Stock(s) Data
+        </h3>
+            <input type = "text" name = "StockCode" placeholder = "Stock Code" required = "required" id = "new_stock_id"/>
+            <input type = "text" name = "Description" placeholder = "Item Description" required = "required" id = "new_desc"/>
+
+            <button class = "btn btn-primary btn-block btn-large" onclick = "updateStock()">
+                Submit
+            </button>   
+
+        <h3>
+            Add Transaction(s) Data
+        </h3>
+            <input type = "text" name = "CustomerID" placeholder = "Customer ID" required = "required" id = "trx_cust_id"/>
+            <input type = "text" name = "StockCode" placeholder = "Stock Code" required = "required" id = "trx_stock_id"/>
+            <input type = "text" name = "value" placeholder = "Quantity" required = "required" id = "trx_quantity"/>
+
+            <button class = "btn btn-primary btn-block btn-large" onclick = "updateTransaction()">
+                Submit
+            </button>
+        <br>
+        <br>
+        <br>
+        <form action = '/train' method = "POST">
+            <center>
+                <button type = "submit" class = "btn btn-primary btn-block btn-large">
+                    Train Model
+                </button>
+            </center>  
+        </form>
+        <br>
+        <br> 
+        <br> 
+        <footer>
+            Copyright  &copy; 2023 by Moch Nabil Farras Dhiya
+        </footer>
+    </div>
+</body>
+
+
+<script type = "text/javascript">
+
+    const recommendUser = () => {
+        let rec_CustomerID = document.getElementById('rec_cust_id').value
+        console.log(rec_CustomerID)
+        fetch('http://127.0.0.1:5000/predict', 
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({'CustomerID': parseInt(rec_CustomerID)})
+            }
+        )
+        .then((res) => {
+            return res.json()
+        })
+        // .then((res) => {
+        //     console.log(res)
+        //     return res
+        // })
+        .then((res) => {
+            console.log(res.prediction)
+            document.getElementById('recommendedItem').innerHTML = res.prediction
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
+
+    const updateUser = () => {
+        let new_CustomerID = document.getElementById('new_cust_id').value
+        console.log(new_CustomerID)
+        fetch('http://127.0.0.1:5000/updateUsers', 
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({'CustomerID': parseInt(new_CustomerID)})
+        }
+    )
+    .then(res => {
+        console.log(res)
+    }).catch(err => {
+        console.error(err)
+    })
+    document.getElementById("new_cust_id").value = ""
+}
+    
+    const updateStock = () => {
+        let new_StockCode = document.getElementById('new_stock_id').value
+        let new_Description = document.getElementById('new_desc').value
+
+        console.log(new_StockCode)
+        console.log(new_Description)
+        fetch('http://127.0.0.1:5000/updateStocks', 
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({'StockCode': String(new_StockCode),
+                                  'Description': String(new_Description)})
+        }
+    )
+    .then(res => {
+        console.log(res)
+    }).catch(err => {
+        console.error(err)
+    })
+    document.getElementById("new_stock_id").value = ""
+    document.getElementById("new_desc").value = ""
+}
+
+    const updateTransaction = () => {
+        let trx_CustomerID = document.getElementById('trx_cust_id').value
+        let trx_StockCode = document.getElementById('trx_stock_id').value
+        let trx_Quantity = document.getElementById('trx_quantity').value
+        console.log(trx_CustomerID)
+        console.log(trx_StockCode)
+        console.log(trx_Quantity)
+        fetch('http://127.0.0.1:5000/updateTransactions', 
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({'CustomerID': parseInt(trx_CustomerID),
+                                  'StockCode': String(trx_StockCode),
+                                  'value': parseInt(trx_Quantity)})
+        }
+    )
+    .then(res => {
+        console.log(res)
+    }).catch(err => {
+        console.error(err)
+    })
+    document.getElementById("trx_cust_id").value = ""
+    document.getElementById("trx_stock_id").value = ""
+    document.getElementById("trx_quantity").value = ""
+}
+
+</script>       
+</html>
