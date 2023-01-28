@@ -19,7 +19,11 @@
         <br>
         <br>
         Recommended Items Code:
-        {{ prediction_text }}
+        <div>
+            <p id = "recommendedItem">
+                -
+            </p>
+        </div>
 
         <br>
         <br>
@@ -67,7 +71,7 @@
         <br> 
         <br> 
         <footer>
-            Copyright  &copy; 2023 by Moch Nabil Farras Dhiya
+            Copyright  &copy; 2023 by Moch Nabil Farras Dhiya & Felix Fernando
         </footer>
     </div>
 </body>
@@ -79,20 +83,29 @@
         let rec_CustomerID = document.getElementById('rec_cust_id').value
         console.log(rec_CustomerID)
         fetch('http://127.0.0.1:5000/predict', 
-        {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify({'CustomerID': parseInt(rec_CustomerID)})
-        }
-    )
-    .then(res => {
-        console.log(res)
-    }).catch(err => {
-        console.error(err)
-    })
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({'CustomerID': parseInt(rec_CustomerID)})
+            }
+        )
+        .then((res) => {
+            return res.json()
+        })
+        // .then((res) => {
+        //     console.log(res)
+        //     return res
+        // })
+        .then((res) => {
+            console.log(res.prediction)
+            document.getElementById('recommendedItem').innerHTML = res.prediction
+        })
+        .catch(err => {
+            console.error(err)
+        })
 }
 
     const updateUser = () => {
@@ -115,7 +128,7 @@
     })
     document.getElementById("new_cust_id").value = ""
 }
-
+    
     const updateStock = () => {
         let new_StockCode = document.getElementById('new_stock_id').value
         let new_Description = document.getElementById('new_desc').value
