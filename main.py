@@ -82,8 +82,7 @@ def predict():
 
         prediction = recom_result(customer_ID)
 
-        return render_template('index.html', 
-                                prediction_text = prediction)
+        return jsonify({'prediction': prediction})
 
     else:
         return 'Invalid.'
