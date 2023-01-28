@@ -34,12 +34,11 @@ def recom_result(customer_ID : str):
 
         recommendations = ''
         for i in range(len(user_df)):
-            if user_df.iloc[i]['score'] != 0:
-                if recommendations == '':
-                    recommendations = mapping(int(user_df.iloc[i]['StockID']))
+            if recommendations == '':
+                recommendations = mapping(int(user_df.iloc[i]['StockID']))
                 
-                else:
-                    recommendations = recommendations + ' | ' + mapping(int(user_df.iloc[i]['StockID']))
+            else:
+                recommendations = recommendations + ' | ' + mapping(int(user_df.iloc[i]['StockID']))
 
         return recommendations
 
@@ -63,10 +62,11 @@ def train_model(users_id = 'CustomerID',
     old_customers = client.open('old_customers').sheet1
     new_customers = client.open('new_customers').sheet1
 
+    customer_data = get_data('customers_data')
     purchase_data = get_data('purchase_data')
     binary_data = get_data('binary_data')
 
-    users_to_recommend = list(set(purchase_data[users_id]))    
+    users_to_recommend = list(set(customer_data['Encoder']))    
 
     # Purchase Counts with Pearson Similarity
     # Old customers
