@@ -4,7 +4,7 @@ This is a side-project created in order to build a recommendation system pipelin
 
 1.   Extract the data from Kaggle website
 2.   Transform the data (making sure it is usable and consistent)
-3.   Make a Recommendation System model using Turicreate (Source: [Medium by Moorissa Tjokro](https://medium.datadriveninvestor.com/how-to-build-a-recommendation-system-for-purchase-data-step-by-step-d6d7a78800b6)
+3.   Make a Recommendation System model using Turicreate
 4.   Segmenting the products and customers using WordCloud and Clustering based on the transaction histories
 5.   Deploy the Recommender Pipeline with Flask so that users can freely enter new transactions and get recommendations
 
