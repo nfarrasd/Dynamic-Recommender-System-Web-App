@@ -45,4 +45,4 @@ This is a side-project created in order to build a recommendation system pipelin
     - Ireland	(\$ 271164.30)
 
 ## Credit
-[Felix Fernando](felixFern (Felix Fernando)) as the one who designed the webpage' UI to be more interactive.
+[Felix Fernando](https://github.com/FelixFern) as the one who designed the webpage' UI to be more interactive.
