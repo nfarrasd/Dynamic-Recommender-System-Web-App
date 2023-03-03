@@ -1,4 +1,6 @@
-# Interactive Dynamic Recommender System
+# Dynamic Recommender System Web-App
+
+Link: [Website](https://recommendation-system-fe.vercel.app/)
 
 This is a side-project created in order to build a recommendation system pipeline for users as well as segmenting the users based on an e-commerce transactional data by the following steps:
 
@@ -41,3 +43,6 @@ This is a side-project created in order to build a recommendation system pipelin
     - United Kingdom (\$ 8747561.66)
     - Netherlands	(\$ 283889.34)
     - Ireland	(\$ 271164.30)
+
+## Credit
+[Felix Fernando](felixFern (Felix Fernando)) as the one who designed the webpage' UI to be more interactive.
