@@ -1,13 +1,15 @@
 import gspread
+import pymongo
 import pandas as pd
+
 from oauth2client.service_account import ServiceAccountCredentials
 
 
 # Read Sheet File
-def get_data(names : str):
+def get_data(names : str, source : str, query = {}):
     # Connect to Sheet
     scope_app = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive', 
-                 'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive'] 
+                'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive'] 
     cred = ServiceAccountCredentials.from_json_keyfile_name('recommender-system-375210-4fb076db18bf.json', scope_app) 
     client = gspread.authorize(cred)
 
@@ -31,6 +33,27 @@ def get_data(names : str):
                 df[col] = df[col].astype(float).astype(int)
 
     return df
+    
+    # Migration to MongoDB
+    # Connect to MongoDB
+    # client = pymongo.MongoClient('mongodb://localhost:27017/')
+
+    # # Fetch the Data
+    # db = client['recsys']
+    # collection = db[names]
+    # cursor = collection.find(query)
+
+    # # Expand the cursor and construct the DataFrame
+    # df =  pd.DataFrame(list(cursor))
+
+    # # Delete the _id
+    # try:
+    #     del df['_id']
+
+    # except:
+    #     pass
+
+    # return df
 
 
 # Update Database Users Data
