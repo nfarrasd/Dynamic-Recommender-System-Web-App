@@ -2,8 +2,20 @@
 
 Link: [Website](https://recommendation-system-fe.vercel.app/)
 
-This is a side-project created in order to build a recommendation system pipeline for users as well as segmenting the users based on an e-commerce transactional data by the following steps:
+This is a side-project made by Moch Nabil Farras Dhiya (me) in order to implement my knowledge on recommendation system algorithm and also model deployment using Flask.
 
+## Business Understanding
+Due to the high-level of competitiveness in today's industry, it is a given for company to have a better understanding on their customer' nature and deliver the best service. In order to do so, recommendation system algorithm is one of the algorithms which are of the main concern among the company. Many company developed a complex algorithm using many method, such as multi-stage neural network, association rules, etc. 
+
+### Problem
+Build a recommendation system algorithm which can recommend items to new users and old users (which already made a purchase) differently.
+
+### Analytical Approach
+1. Distinguish old users and new users, then experimenting with different models for both cases, which includes the usage of pearson and cosine similarity approaches.
+2. Evaluate the models performance, then pick the model which has the lowest RMSE for both cases.
+3. Do additional analysis on the dataset to gain a better understanding of the customer base location, and also the most popular product names and categories.
+
+## Steps
 1.   Extract the data from Kaggle website
 2.   Transform the data (making sure it is usable and consistent)
 3.   Make a Recommendation System model using existing package for simplicity
