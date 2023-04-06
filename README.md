@@ -4,6 +4,21 @@ Link: [Website](https://recommendation-system-fe.vercel.app/)
 
 This is a side-project made by Moch Nabil Farras Dhiya (me) in order to implement my knowledge on recommendation system algorithm and also model deployment using Flask.
 
+## Guide
+Please always refer to this database below when using all the features in the web-app.
+**Databases**
+1. [User Database](https://docs.google.com/spreadsheets/d/1sssW6fHPxilpS4gafUbfdR5s3zzlYI2Wah8Oc1QZIB4/edit?usp=sharing)
+2. [Stock Database](https://docs.google.com/spreadsheets/d/1JIwFwvc1HKbZCXHEOTi3FSdWnNdXN62yCqYCkoYHCnY/edit?usp=sharing)
+3. [Transaction Database](https://docs.google.com/spreadsheets/d/1xluzFXJoYJ5s3KoEITQp38L098NbBShCiok-71toF4E/edit?usp=sharing)
+
+**Optional Steps**
+1. Enter a new user ID at the "Add Customer Data" section
+2. Enter a new stock data which consists of Stock Code and Item Description at the "Add Stock Data" section.
+3. Enter a new transaction history
+
+**Main Feature**
+Enter an existing user ID, then wait several seconds for the backend to process. In a short while, 10 recommended items (Stock Code) will pop up.
+
 ## Business Understanding
 Due to the high-level of competitiveness in today's industry, it is a given for company to have a better understanding on their customer' nature and deliver the best service. In order to do so, recommendation system algorithm is one of the algorithms which are of the main concern among the company. Many company developed a complex algorithm using many method, such as multi-stage neural network, association rules, etc. 
 
@@ -19,42 +34,12 @@ Build a recommendation system algorithm which can recommend items to new users a
 1.   Extract the data from Kaggle website
 2.   Transform the data (making sure it is usable and consistent)
 3.   Make a Recommendation System model using existing package for simplicity
-4.   Segmenting the products and customers using WordCloud and Clustering based on the transaction histories
-5.   Deploy the Recommender Pipeline with Flask so that users can freely enter new transactions and get recommendations
-
-**Note**: 
-1. Steps 1-4 are not shown in this repo, only the analysis and model summary will be presented below. (Since this repo focuses more on the RecSys model deployment and back-end).
-2. This can only be run through Ubuntu since Turicreate module does not suppoert Windows OS (except by using WSL).
-3. Please put the 'index.html' file in a folder called 'template'.
+4.   Deploy the Recommender Pipeline with Flask with add-in features (can enter new users, products, transactions)
 
 ## Summary
-1. Recommendation System Pipeline was built under 2 scenarios:
-    - **Purchase Counts with Pearson Similarity** method for old users
-    - **Popularity Model with Binary Input** method for new users
-2. Followings are the **top 5 most popular products**:
-
-    - White Hanging Heart T-Light Holder	(2028 sold)
-    - Regency Cakestand 3 Tier (1724 sold)
-    - Jumbo Bag Red Retrospot	(1618 sold)
-    - Assorted Colour Bird Ornament	(1408 sold)
-    - Party Bunting (1397 sold)
-3. Products of the following categories are **more likely** to **attract** customers:
-    - Heart
-    - Vintage
-    - Bag
-    - Retrospot
-    - Cake
-  
-    with **Red**, **Pink**, and **Blue** colours.
-4. The weekly # of transactions and Gross Revenue Value (GPV) have an **increment trend**, with an increment of **+45.07%** and **+17.89%** overall, respectively.
-5. Followings are the **top 3 countries** with the **most # of transactions**:
-    - United Kingdom (475309 transactions)
-    - Germany	(8635 transactions)
-    - France	(8065 transactions)
-6. Followings are the **top 3 countries** with the **highest GPV**:
-    - United Kingdom (\$ 8747561.66)
-    - Netherlands	(\$ 283889.34)
-    - Ireland	(\$ 271164.30)
+Recommendation System Pipeline was built under 2 scenarios:
+    1. **Purchase Counts with Pearson Similarity** method for old users
+    2. **Popularity Model with Binary Input** method for new users
 
 ## Credit
 [Felix Fernando](https://github.com/FelixFern) as the one who designed the webpage' UI to be more interactive.
