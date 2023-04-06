@@ -14,7 +14,7 @@ Please always refer to this database below when using all the features in the we
 **Optional Steps**
 1. Enter a new user ID at the "Add Customer Data" section
 2. Enter a new stock data which consists of Stock Code and Item Description at the "Add Stock Data" section.
-3. Enter a new transaction history
+3. Enter a new transaction history at the "Add Transaction" section.
 
 **Main Feature**
 Enter an existing user ID, then wait several seconds for the backend to process. In a short while, 10 recommended items (Stock Code) will pop up.
